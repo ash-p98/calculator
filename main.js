@@ -26,9 +26,17 @@ const operator = buttonOperators.forEach((operator) => {
 buttonEquals.addEventListener("click", (e) => {
   e.preventDefault();
   console.log(display.value);
-  if (operator == "+") {
-    console.log(num1);
-  }
+  let calculationArray = display.value.split("");
+  console.log(calculationArray);
+  if (calculationArray[1] == '+'){
+    add(num1, num2);
+} else if (calculationArray[1] == '-'){
+    minus(num1, num2);
+} else if (calculationArray[1] == '*'){
+    multiply(num1, num2);
+} else if (calculationArray[1] == '/'){
+    divide(num1, num2);
+}
 });
 
 buttonDecimal.addEventListener("click", (decimal) => {
@@ -39,10 +47,8 @@ buttonDecimal.addEventListener("click", (decimal) => {
 
 buttonAC.addEventListener("click", (e) => {
     e.preventDefault();
-    if(display.value != ""){
-        let display = "";
-    };
-});
+        display.value == "";
+    });
 
 let num1 = 10;
 let num2 =2;  
@@ -50,33 +56,23 @@ let num2 =2;
 function add (num1, num2){
     let total = 0;
     total = num1 + num2;
-    return total;
+    display.value =+ total;
 }
 
 function minus(num1, num2){
     let total = 0;
     total = num1 - num2;
-    return total;
+    display.value =+ total;
 }
 
 function multiply (num1, num2){
     let total = 0;
     total = num1 * num2;
-    return total;
+    display.value =+ total;
 }
 
 function divide (num1, num2){
     let total = 0;
     total = num1 / num2;
-    return total;
-}
-
-if (buttonOperators == '+'){
-    add(num1, num2);
-} else if (buttonOperators == '-'){
-    minus(num1, num2);
-} else if (buttonOperators == '*'){
-    multiply(num1, num2);
-} else if (buttonOperators == '/'){
-    divide(num1, num2);
+    display.value =+ total;
 }

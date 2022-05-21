@@ -1,78 +1,121 @@
-const display = document.querySelector(".screen");
-const buttonNumbers = document.querySelectorAll(".number");
-const buttonOperators = document.querySelectorAll(".operator");
-const buttonEquals = document.querySelector(".equals");
-const buttonDecimal = document.querySelector(".decimal");
-const buttonAC = document.querySelector(".clear");
+const number = document.querySelectorAll(".number");
+const operator = document.querySelectorAll(".operator");
+const point = document.getElementById("point");
+const equal = document.getElementById("equal");
+const clear = document.getElementById("clear");
+const negate = document.getElementById("negate");
+const percentage = document.getElementById("percentage");
+const display = document.querySelector("#display");
 
-buttonNumbers.forEach((number) => {
-  number.addEventListener("click", (e) => {
-    e.preventDefault();
-    console.log(e.target);
-     let num1 = number.innerHTML;
-    console.log(num1);
-    display.value += num1;
-  });
-});
+let newInput = "";
+let firstNumber = "";
+let secondNumber = "";
 
-const operator = buttonOperators.forEach((operator) => {
-  operator.addEventListener("click", (e) => {
-    e.preventDefault();
-    console.log(operator.innerHTML);
-    display.value += operator.innerHTML;
-  });
-});
+let firstOperator = "";
+let newOperator = "";
 
-buttonEquals.addEventListener("click", (e) => {
-  e.preventDefault();
-  console.log(display.value);
-  let calculationArray = display.value.split("");
-  console.log(calculationArray);
-  if (calculationArray[1] == '+'){
-    add(num1, num2);
-} else if (calculationArray[1] == '-'){
-    minus(num1, num2);
-} else if (calculationArray[1] == '*'){
-    multiply(num1, num2);
-} else if (calculationArray[1] == '/'){
-    divide(num1, num2);
-}
-});
+let partialOutput = "";
+let finalOutput = "";
 
-buttonDecimal.addEventListener("click", (decimal) => {
-  e.preventDefault();
-  console.log(decimal.innerHTML);
-  display.value += decimal.innerHTML;
-}); 
+operator.forEach (e => e.disabled = true);
 
-buttonAC.addEventListener("click", (e) => {
-    e.preventDefault();
-        display.value == "";
-    });
+number.forEach(item => {
+    item.addEventListener("click", (e) => {
+    equal.disabled = false;
+    operator.forEach (e => e.disabled = false);
+     if (finalOutput == "") {
+        newInput = e.target.value;
+        display.innerHTML += newInput;
+        if(e.target.innerHTML === '.')
+        point.disabled = true;     
+    } else {
+        display.innerHTML = ""
+        finalOutput = ""
+        newInput = e.target.value;
+        display.innerHTML += newInput;
+        if(e.target.innerHTML === '.')
+        point.disabled = true;     
+        }
+    })
+})
 
-let num1 = 10;
-let num2 =2;  
+operator.forEach(item => {
+    item.addEventListener("click", (e) => {
+        point.disabled = false;
+        equal.disabled = true;
+        operator.forEach (e => e.disabled = true)
 
-function add (num1, num2){
-    let total = 0;
-    total = num1 + num2;
-    display.value =+ total;
-}
+        if (firstNumber == "") {
+            firstNumber = display.innerHTML;
+            firstOperator = e.target.value;
+            console.log(firstNumber)
+            display.innerHTML = "";
+        } else { 
+            secondNumber = display.innerHTML;
+            newOperator = e.target.value;
+            if (firstOperator == "+") {
+                partialOutput = parseFloat(firstNumber) + parseFloat(secondNumber);
+            } else if (firstOperator == "-") {
+                partialOutput = parseFloat(firstNumber) - parseFloat(secondNumber);
+            } else if (firstOperator == "x") {
+                partialOutput = parseFloat(firstNumber) * parseFloat(secondNumber);
+            } else if (firstOperator == "÷") {
+                partialOutput = parseFloat(firstNumber) / parseFloat(secondNumber);
+            }
+            firstNumber = partialOutput;
+            display.innerHTML = "";
+            firstOperator = newOperator;
+        }
+    })
+})
 
-function minus(num1, num2){
-    let total = 0;
-    total = num1 - num2;
-    display.value =+ total;
-}
 
-function multiply (num1, num2){
-    let total = 0;
-    total = num1 * num2;
-    display.value =+ total;
-}
+equal.addEventListener("click", (e) => {
+    if (firstNumber != "") {
+        secondNumber = display.innerHTML;
+        if (firstOperator == "+") {
+            finalOutput = parseFloat(firstNumber) + parseFloat(secondNumber);
+        } else if (firstOperator == "-") {
+            finalOutput = parseFloat(firstNumber) - parseFloat(secondNumber);
+        } else if (firstOperator == "x") {
+            finalOutput = parseFloat(firstNumber) * parseFloat(secondNumber);
+        } else if (firstOperator == "÷") {
+            finalOutput = parseFloat(firstNumber) / parseFloat(secondNumber);
+        }
+        display.innerHTML = finalOutput;
+    } else { display.innerHTML = display.innerHTML;
+        }
+    point.disabled = false;
+    equal.disabled = true;
+    firstNumber = "";
+})
 
-function divide (num1, num2){
-    let total = 0;
-    total = num1 / num2;
-    display.value =+ total;
-}
+
+clear.addEventListener("click", (e) => {
+    display.innerHTML = "";
+    point.disabled = false;
+    firstNumber = "";
+    secondNumber = "";
+    firstOperator = "";
+    output = "";
+    operator.forEach (e => e.disabled = true);
+})
+
+
+percentage.addEventListener("click", e => {
+    point.disabled = true;
+    if (display.innerHTML == "") {
+        display.innerHTML = "";
+    } else {
+        display.innerHTML = parseFloat(display.innerHTML)/100;
+    }
+})
+
+
+negate.addEventListener("click", (e) => {
+    if (display.innerHTML == "") {
+        display.innerHTML = "";
+    } else {
+        display.innerHTML = parseFloat(display.innerHTML)* (-1);
+    }
+})
